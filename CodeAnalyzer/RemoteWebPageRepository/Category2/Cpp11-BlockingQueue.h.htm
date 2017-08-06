@@ -1,0 +1,173 @@
+<!--
+Cpp11-BlockingQueue.h.htm- Html file for Cpp11-BlockingQueue.h
+ Published: 4th April 2017 
+Nikhil Prashar, CSE687 - Object Oriented Design, Spring 2017
+-->
+<html>
+<!--
+HtmlHeader.htm- Common html header file.
+ Published: 4th April 2017 
+Nikhil Prashar, CSE687 - Object Oriented Design, Spring 2017
+-->
+<head>
+<link rel = "stylesheet" href = "../../ScriptingFiles/styles.css" />
+<script src="../../ScriptingFiles/JavaScriptFile.js"></script>
+</head>
+<body>
+<table id="myTable" style="border:0"><tr><th style="border:0"><h1>Cpp11-BlockingQueue.h</h1></th><th style="border:0"><h3 align="right"><a href="index.htm">Back to Table Of Contents</a></h3></th></tr></table><hr />
+<div class="indent">
+<h4>dependencies:</h4>
+<a href="Cpp11-BlockingQueue.cpp.htm">Cpp11-BlockingQueue.cpp</a>
+</div>
+<hr />
+<pre>
+#ifndef CPP11_BLOCKINGQUEUE_H
+#define CPP11_BLOCKINGQUEUE_H
+///////////////////////////////////////////////////////////////
+// Cpp11-BlockingQueue.h - Thread-safe Blocking Queue        //
+// ver 1.2                                                   //
+// Jim Fawcett, CSE687 - Object Oriented Design, Spring 2015 //
+///////////////////////////////////////////////////////////////
+/*
+ * Package Operations:
+ * -------------------
+ * This package contains one thread-safe class: BlockingQueue&lt;T&gt;.
+ * Its purpose is to support sending messages between threads.
+ * It is implemented using C++11 threading constructs including 
+ * std::condition_variable and std::mutex.  The underlying storage
+ * is provided by the non-thread-safe std::queue&lt;T&gt;.
+ *
+ * Required Files:
+ * ---------------
+ * Cpp11-BlockingQueue.h
+ *
+ * Build Process:
+ * --------------
+ * devenv Cpp11-BlockingQueue.sln /rebuild debug
+ *
+ * Maintenance History:
+ * --------------------
+ * ver 1.2 : 27 Feb 2016
+ * - added front();
+ * - added move ctor and move assignment
+ * - deleted copy ctor and copy assignment
+ * ver 1.1 : 26 Jan 2015
+ * - added copy constructor and assignment operator
+ * ver 1.0 : 03 Mar 2014
+ * - first release
+ *
+ */
+
+#include &lt;condition_variable&gt;
+#include &lt;mutex&gt;
+#include &lt;thread&gt;
+#include &lt;queue&gt;
+#include &lt;string&gt;
+#include &lt;iostream&gt;
+#include &lt;sstream&gt;
+
+template &lt;typename T&gt;
+<button onClick = "myFunction('1','button1')" id="button1">-</button>class BlockingQueue {<span id="1">
+public:
+<button onClick = "myFunction('2','button2')" id="button2">-</button>  BlockingQueue() {<span id="2"></span>}
+  BlockingQueue(BlockingQueue&lt;T&gt;&& bq);
+  BlockingQueue&lt;T&gt;& operator=(BlockingQueue&lt;T&gt;&& bq);
+  BlockingQueue(const BlockingQueue&lt;T&gt;&) = delete;
+  BlockingQueue&lt;T&gt;& operator=(const BlockingQueue&lt;T&gt;&) = delete;
+  T deQ();
+  void enQ(const T& t);
+  T& front();
+  void clear();
+  size_t size();
+private:
+  std::queue&lt;T&gt; q_;
+  std::mutex mtx_;
+  std::condition_variable cv_;
+</span>};
+//----&lt; move constructor &gt;---------------------------------------------
+
+template&lt;typename T&gt;
+<button onClick = "myFunction('3','button3')" id="button3">-</button>BlockingQueue&lt;T&gt;::BlockingQueue(BlockingQueue&lt;T&gt;&& bq) // need to lock so can't initialize
+{<span id="3">
+  std::lock_guard&lt;std::mutex&gt; l(mtx_);
+  q_ = bq.q_;
+  while (bq.q_.size() &gt; 0)  // clear bq
+    bq.q_.pop();
+  /* can't copy  or move mutex or condition variable, so use default members */
+</span>}
+//----&lt; move assignment &gt;----------------------------------------------
+
+template&lt;typename T&gt;
+<button onClick = "myFunction('4','button4')" id="button4">-</button>BlockingQueue&lt;T&gt;& BlockingQueue&lt;T&gt;::operator=(BlockingQueue&lt;T&gt;&& bq)
+{<span id="4">
+  if (this == &bq) return *this;
+  std::lock_guard&lt;std::mutex&gt; l(mtx_);
+  q_ = bq.q_;
+  while (bq.q_.size() &gt; 0)  // clear bq
+    bq.q_.pop();
+  /* can't move assign mutex or condition variable so use target's */
+  return *this;
+</span>}
+//----&lt; remove element from front of queue &gt;---------------------------
+
+template&lt;typename T&gt;
+<button onClick = "myFunction('5','button5')" id="button5">-</button>T BlockingQueue&lt;T&gt;::deQ()
+{<span id="5">
+  std::unique_lock&lt;std::mutex&gt; l(mtx_);
+  if(q_.size() &gt; 0)
+<button onClick = "myFunction('6','button6')" id="button6">-</button>  {<span id="6">
+    T temp = q_.front();
+    q_.pop();
+    return temp;
+  </span>}
+  // may have spurious returns so loop on !condition
+
+  while (q_.size() == 0)
+<button onClick = "myFunction('7','button7')" id="button7">-</button>    cv_.wait(l, [this] () {<span id="7"> return q_.size() &gt; 0; </span>});
+  T temp = q_.front();
+  q_.pop();
+  return temp;
+</span>}
+//----&lt; push element onto back of queue &gt;------------------------------
+
+template&lt;typename T&gt;
+<button onClick = "myFunction('8','button8')" id="button8">-</button>void BlockingQueue&lt;T&gt;::enQ(const T& t)
+{<span id="8">
+<button onClick = "myFunction('9','button9')" id="button9">-</button>  {<span id="9">
+    std::lock_guard&lt;std::mutex&gt; l(mtx_);
+    q_.push(t);
+  </span>}
+  cv_.notify_one();
+</span>}
+//----&lt; peek at next item to be popped &gt;-------------------------------
+
+template &lt;typename T&gt;
+<button onClick = "myFunction('10','button10')" id="button10">-</button>T& BlockingQueue&lt;T&gt;::front()
+{<span id="10">
+  std::lock_guard&lt;std::mutex&gt; l(mtx_);
+  if(q_.size() &gt; 0)
+    return q_.front();
+  return T();
+</span>}
+//----&lt; remove all elements from queue &gt;-------------------------------
+
+template &lt;typename T&gt;
+<button onClick = "myFunction('11','button11')" id="button11">-</button>void BlockingQueue&lt;T&gt;::clear()
+{<span id="11">
+  std::lock_guard&lt;std::mutex&gt; l(mtx_);
+  while (q_.size() &gt; 0)
+    q_.pop();
+</span>}
+//----&lt; return number of elements in queue &gt;---------------------------
+
+template&lt;typename T&gt;
+<button onClick = "myFunction('12','button12')" id="button12">-</button>size_t BlockingQueue&lt;T&gt;::size()
+{<span id="12">
+  std::lock_guard&lt;std::mutex&gt; l(mtx_);
+  return q_.size();
+</span>}
+
+#endif
+</pre>
+</body>
+</html>

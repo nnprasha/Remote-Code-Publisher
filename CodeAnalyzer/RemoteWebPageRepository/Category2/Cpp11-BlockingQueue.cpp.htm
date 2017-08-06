@@ -1,0 +1,114 @@
+<!--
+Cpp11-BlockingQueue.cpp.htm- Html file for Cpp11-BlockingQueue.cpp
+ Published: 4th April 2017 
+Nikhil Prashar, CSE687 - Object Oriented Design, Spring 2017
+-->
+<html>
+<!--
+HtmlHeader.htm- Common html header file.
+ Published: 4th April 2017 
+Nikhil Prashar, CSE687 - Object Oriented Design, Spring 2017
+-->
+<head>
+<link rel = "stylesheet" href = "../../ScriptingFiles/styles.css" />
+<script src="../../ScriptingFiles/JavaScriptFile.js"></script>
+</head>
+<body>
+<table id="myTable" style="border:0"><tr><th style="border:0"><h1>Cpp11-BlockingQueue.cpp</h1></th><th style="border:0"><h3 align="right"><a href="index.htm">Back to Table Of Contents</a></h3></th></tr></table><hr />
+<div class="indent">
+<h4>dependencies:</h4>
+<a href="Cpp11-BlockingQueue.h.htm">Cpp11-BlockingQueue.h</a>
+</div>
+<hr />
+<pre>
+///////////////////////////////////////////////////////////////
+// Cpp11-BlockingQueue.cpp - Thread-safe Blocking Queue      //
+// ver 1.2                                                   //
+// Jim Fawcett, CSE687 - Object Oriented Design, Spring 2013 //
+///////////////////////////////////////////////////////////////
+
+#include &lt;condition_variable&gt;
+#include &lt;mutex&gt;
+#include &lt;thread&gt;
+#include &lt;queue&gt;
+#include &lt;string&gt;
+#include &lt;iostream&gt;
+#include &lt;sstream&gt;
+#include "Cpp11-BlockingQueue.h"
+
+#ifdef TEST_BLOCKINGQUEUE
+
+std::mutex ioLock;
+
+<button onClick = "myFunction('1','button1')" id="button1">-</button>void test(BlockingQueue&lt;std::string&gt;* pQ)
+{<span id="1">
+  std::string msg;
+  do
+<button onClick = "myFunction('2','button2')" id="button2">-</button>  {<span id="2">
+    msg = pQ-&gt;deQ();
+<button onClick = "myFunction('3','button3')" id="button3">-</button>    {<span id="3">
+      std::lock_guard&lt;std::mutex&gt; l(ioLock);
+      std::cout &lt;&lt; "\n  thread deQed " &lt;&lt; msg.c_str();
+    </span>}
+    std::this_thread::sleep_for(std::chrono::milliseconds(10));
+  </span>} while(msg != "quit");
+</span>}
+
+<button onClick = "myFunction('4','button4')" id="button4">-</button>int main()
+{<span id="4">
+  std::cout &lt;&lt; "\n  Demonstrating C++11 Blocking Queue";
+  std::cout &lt;&lt; "\n ====================================";
+
+  BlockingQueue&lt;std::string&gt; q;
+  std::thread t(test, &q);
+
+  for(int i=0; i&lt;15; ++i)
+<button onClick = "myFunction('5','button5')" id="button5">-</button>  {<span id="5">
+    std::ostringstream temp;
+    temp &lt;&lt; i;
+    std::string msg = std::string("msg#") + temp.str();
+<button onClick = "myFunction('6','button6')" id="button6">-</button>    {<span id="6">
+      std::lock_guard&lt;std::mutex&gt; l(ioLock);
+      std::cout &lt;&lt; "\n   main enQing " &lt;&lt; msg.c_str();
+    </span>}
+    q.enQ(msg);
+    std::this_thread::sleep_for(std::chrono::milliseconds(3));
+  </span>}
+  q.enQ("quit");
+  t.join();
+
+  std::cout &lt;&lt; "\n";
+  std::cout &lt;&lt; "\n  Making move copy of BlockingQueue";
+  std::cout &lt;&lt; "\n -----------------------------------";
+
+  std::string msg = "test";
+  q.enQ(msg);
+  std::cout &lt;&lt; "\n  before move:";
+  std::cout &lt;&lt; "\n    q.size() = " &lt;&lt; q.size();
+  std::cout &lt;&lt; "\n    q.front() = " &lt;&lt; q.front();
+  BlockingQueue&lt;std::string&gt; q2 = std::move(q);  // move assignment
+  std::cout &lt;&lt; "\n  after move:";
+  std::cout &lt;&lt; "\n    q2.size() = " &lt;&lt; q2.size();
+  std::cout &lt;&lt; "\n    q.size() = " &lt;&lt; q.size();
+  std::cout &lt;&lt; "\n    q2 element = " &lt;&lt; q2.deQ() &lt;&lt; "\n";
+
+  std::cout &lt;&lt; "\n  Move assigning state of BlockingQueue";
+  std::cout &lt;&lt; "\n ---------------------------------------";
+  BlockingQueue&lt;std::string&gt; q3;
+  q.enQ("test");
+  std::cout &lt;&lt; "\n  before move:";
+  std::cout &lt;&lt; "\n    q.size() = " &lt;&lt; q.size();
+  std::cout &lt;&lt; "\n    q.front() = " &lt;&lt; q.front();
+  q3 = std::move(q);
+  std::cout &lt;&lt; "\n  after move:";
+  std::cout &lt;&lt; "\n    q.size() = " &lt;&lt; q.size();
+  std::cout &lt;&lt; "\n    q3.size() = " &lt;&lt; q3.size();
+  std::cout &lt;&lt; "\n    q3 element = " &lt;&lt; q3.deQ() &lt;&lt; "\n";
+
+  std::cout &lt;&lt; "\n\n";
+</span>}
+
+#endif
+</pre>
+</body>
+</html>

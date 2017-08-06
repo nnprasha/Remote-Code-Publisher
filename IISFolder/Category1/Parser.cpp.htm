@@ -1,0 +1,173 @@
+<!--
+Parser.cpp.htm- Html file for Parser.cpp
+ Published: 4th April 2017 
+Nikhil Prashar, CSE687 - Object Oriented Design, Spring 2017
+-->
+<html>
+<!--
+HtmlHeader.htm- Common html header file.
+ Published: 4th April 2017 
+Nikhil Prashar, CSE687 - Object Oriented Design, Spring 2017
+-->
+<head>
+<link rel = "stylesheet" href = "../../ScriptingFiles/styles.css" />
+<script src="../../ScriptingFiles/JavaScriptFile.js"></script>
+</head>
+<body>
+<table id="myTable" style="border:0"><tr><th style="border:0"><h1>Parser.cpp</h1></th><th style="border:0"><h3 align="right"><a href="index.htm">Back to Table Of Contents</a></h3></th></tr></table><hr />
+<div class="indent">
+<h4>dependencies:</h4>
+<a href="Parent.cpp.htm">Parent.cpp</a>
+<a href="Parser.h.htm">Parser.h</a>
+<a href="Test.cpp.htm">Test.cpp</a>
+</div>
+<hr />
+<pre>
+/////////////////////////////////////////////////////////////////////
+//  Parser.cpp - Analyzes C++ language constructs                  //
+//  ver 1.5                                                        //
+//  Language:      Visual C++ 2008, SP1                            //
+//  Platform:      Dell XPS 8900, Windows 10                       //
+//  Application:   Prototype for CSE687 Pr1, Sp09, ...             //
+//  Author:        Jim Fawcett, CST 4-187, Syracuse University     //
+//                 (315) 443-3948, jfawcett@twcny.rr.com           //
+/////////////////////////////////////////////////////////////////////
+
+#include &lt;iostream&gt;
+#include &lt;string&gt;
+#include "../Utilities/Utilities.h"
+#include "../Tokenizer/Tokenizer.h"
+#include "../SemiExp/SemiExp.h"
+#include "Parser.h"
+#include "ActionsAndRules.h"
+#include "ConfigureParser.h"
+
+using namespace CodeAnalysis;
+using namespace Scanner;
+using namespace Utilities;
+using Demo = Logging::StaticLogger&lt;1&gt;;
+
+//----&lt; register parsing rule &gt;--------------------------------
+
+<button onClick = "myFunction('1','button1')" id="button1">-</button>void Parser::addRule(IRule* pRule)
+{<span id="1">
+  rules.push_back(pRule);
+</span>}
+//----&lt; get next ITokCollection &gt;------------------------------
+
+<button onClick = "myFunction('2','button2')" id="button2">-</button>bool Parser::next() 
+{<span id="2"> 
+  bool succeeded = pTokColl-&gt;get();
+
+  if (!succeeded)
+<button onClick = "myFunction('3','button3')" id="button3">-</button>  {<span id="3">
+    return false;
+  </span>}
+  std::string debug = pTokColl-&gt;show();
+  //GrammarHelper::showParseDemo("get SemiExp: ", *pTokColl);
+
+  pTokColl-&gt;trim();
+
+  return true;
+</span>}
+
+//----&lt; parse the SemiExp by applying all rules to it &gt;--------
+
+<button onClick = "myFunction('4','button4')" id="button4">-</button>bool Parser::parse()
+{<span id="4">
+  for (size_t i = 0; i&lt;rules.size(); ++i)
+<button onClick = "myFunction('5','button5')" id="button5">-</button>  {<span id="5">
+    std::string debug = pTokColl-&gt;show();
+
+    bool doWhat = rules[i]-&gt;doTest(pTokColl);
+    if (doWhat == IRule::Stop)
+      break;
+  </span>}
+  return true;
+</span>}
+//----&lt; register action with a rule &gt;--------------------------
+
+<button onClick = "myFunction('6','button6')" id="button6">-</button>void IRule::addAction(IAction *pAction)
+{<span id="6">
+  actions.push_back(pAction);
+</span>}
+//----&lt; invoke all actions associated with a rule &gt;------------
+
+<button onClick = "myFunction('7','button7')" id="button7">-</button>void IRule::doActions(const ITokCollection* pTokColl)
+{<span id="7">
+  if(actions.size() &gt; 0)
+    for(size_t i=0; i&lt;actions.size(); ++i)
+      actions[i]-&gt;doAction(pTokColl);
+</span>}
+
+//----&lt; test stub &gt;--------------------------------------------
+
+#include "../FileSystem/FileSystem.h"
+
+#ifdef TEST_PARSER
+
+#include &lt;queue&gt;
+#include &lt;string&gt;
+#define Util StringHelper
+
+<button onClick = "myFunction('8','button8')" id="button8">-</button>int main(int argc, char* argv[])
+{<span id="8">
+  Util::Title("Testing Parser Class");
+  putline();
+
+  // collecting tokens from files, named on the command line
+
+  if(argc &lt; 2)
+<button onClick = "myFunction('9','button9')" id="button9">-</button>  {<span id="9">
+    std::cout 
+      &lt;&lt; "\n  please enter name of file to process on command line\n\n";
+    return 1;
+  </span>}
+
+  for(int i=1; i&lt;argc; ++i)
+<button onClick = "myFunction('10','button10')" id="button10">-</button>  {<span id="10">
+    std::string fileSpec = FileSystem::Path::getFullFileSpec(argv[i]);
+    std::string msg = "Processing file" + fileSpec;
+    Util::title(msg);
+    putline();
+
+    ConfigParseForCodeAnal configure;
+    Parser* pParser = configure.Build();
+    try
+<button onClick = "myFunction('11','button11')" id="button11">-</button>    {<span id="11">
+      if(pParser)
+<button onClick = "myFunction('12','button12')" id="button12">-</button>      {<span id="12">
+        if(!configure.Attach(argv[i]))
+<button onClick = "myFunction('13','button13')" id="button13">-</button>        {<span id="13">
+          std::cout &lt;&lt; "\n  could not open file " &lt;&lt; fileSpec &lt;&lt; std::endl;
+          continue;
+        </span>}
+      </span>}
+      else
+<button onClick = "myFunction('14','button14')" id="button14">-</button>      {<span id="14">
+        std::cout &lt;&lt; "\n\n  Parser not built\n\n";
+        return 1;
+      </span>}
+      // now that parser is built, use it
+
+      while(pParser-&gt;next())
+        pParser-&gt;parse();
+      std::cout &lt;&lt; "\n";
+
+      // show AST
+      Repository* pRepo = Repository::getInstance();
+      ASTNode* pGlobalScope = pRepo-&gt;getGlobalScope();
+      TreeWalk(pGlobalScope);
+    </span>}
+    catch(std::exception& ex)
+<button onClick = "myFunction('15','button15')" id="button15">-</button>    {<span id="15">
+      std::cout &lt;&lt; "\n\n    " &lt;&lt; ex.what() &lt;&lt; "\n\n";
+    </span>}
+  </span>}
+  std::cout &lt;&lt; "\n";
+</span>}
+
+#endif
+</pre>
+</body>
+</html>

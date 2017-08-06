@@ -1,0 +1,6 @@
+﻿  DepAnal.cpp
+s:\ood\forproject2\codeanalyzer\depanal\depanal.h(2): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+s:\ood\forproject2\codeanalyzer\depanal\depanal.h(3): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+s:\ood\forproject2\codeanalyzer\depanal\depanal.h(4): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+s:\ood\forproject2\codeanalyzer\depanal\depanal.h(5): warning C4067: unexpected tokens following preprocessor directive - expected a newline
+  DepAnal.vcxproj -> S:\OOD\ForProject2\CodeAnalyzer\x64\Debug\DepAnal.lib

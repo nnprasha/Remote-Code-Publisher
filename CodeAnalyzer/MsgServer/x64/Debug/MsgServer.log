@@ -1,0 +1,16 @@
+﻿  MsgServer.cpp
+  Utilities.cpp
+  Sockets.cpp
+s:\ood\ood\project4help\commprototype\sockets\sockets.cpp(161): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+s:\ood\ood\project4help\commprototype\sockets\sockets.cpp(180): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+s:\ood\ood\project4help\commprototype\sockets\sockets.cpp(199): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+s:\ood\ood\project4help\commprototype\sockets\sockets.cpp(240): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+s:\ood\ood\project4help\commprototype\sockets\sockets.cpp(248): warning C4267: 'argument': conversion from 'size_t' to 'int', possible loss of data
+s:\ood\ood\project4help\commprototype\sockets\sockets.cpp(267): warning C4267: 'argument': conversion from 'size_t' to 'DWORD', possible loss of data
+  Logger.cpp
+  Cpp11-BlockingQueue.cpp
+  HttpMessage.cpp
+  FileSystem.cpp
+  Generating Code...
+  MsgServer.vcxproj -> S:\OOD\OOD\Project4Help\CommPrototype\x64\Debug\MsgServer.exe
+  MsgServer.vcxproj -> S:\OOD\OOD\Project4Help\CommPrototype\x64\Debug\MsgServer.pdb (Full PDB)

@@ -1,0 +1,101 @@
+<!--
+Child.h.htm- Html file for Child.h
+ Published: 4th April 2017 
+Nikhil Prashar, CSE687 - Object Oriented Design, Spring 2017
+-->
+<html>
+<!--
+HtmlHeader.htm- Common html header file.
+ Published: 4th April 2017 
+Nikhil Prashar, CSE687 - Object Oriented Design, Spring 2017
+-->
+<head>
+<link rel = "stylesheet" href = "../../ScriptingFiles/styles.css" />
+<script src="../../ScriptingFiles/JavaScriptFile.js"></script>
+</head>
+<body>
+<table id="myTable" style="border:0"><tr><th style="border:0"><h1>Child.h</h1></th><th style="border:0"><h3 align="right"><a href="index.htm">Back to Table Of Contents</a></h3></th></tr></table><hr />
+<div class="indent">
+<h4>dependencies:</h4>
+<a href="Child.cpp.htm">Child.cpp</a>
+<a href="Child2.h.htm">Child2.h</a>
+<a href="Parent.cpp.htm">Parent.cpp</a>
+<a href="Test.cpp.htm">Test.cpp</a>
+</div>
+<hr />
+<pre>
+#ifndef CHILD_H
+#define CHILD_H
+
+#include &lt;iostream&gt;
+#include &lt;vector&gt;
+#include &lt;map&gt;
+
+
+int globalData = 10;
+
+<button onClick = "myFunction('1','button1')" id="button1">-</button>namespace ChildTest {<span id="1">
+	
+<button onClick = "myFunction('2','button2')" id="button2">-</button>	struct element {<span id="2">
+		std::string name, type;
+		int start_line, end_line;
+		std::vector&lt;element&gt; children;
+	</span>};
+<button onClick = "myFunction('3','button3')" id="button3">-</button>	enum Numbers {<span id="3"> one = 1, two, three, four </span>};
+<button onClick = "myFunction('4','button4')" id="button4">-</button>	class Child {<span id="4">
+	public:
+	<button onClick = "myFunction('5','button5')" id="button5">-</button>	Child() {<span id="5"></span>};
+	<button onClick = "myFunction('6','button6')" id="button6">-</button>	~Child() {<span id="6"></span>};
+	<button onClick = "myFunction('7','button7')" id="button7">-</button>	void inlineMethod(int a) {<span id="7">
+			int i;
+		<button onClick = "myFunction('8','button8')" id="button8">-</button>	for (i = 0; i &lt; 2; i++) {<span id="8">
+				std::cout &lt;&lt; a;
+			<button onClick = "myFunction('9','button9')" id="button9">-</button>	if (i == 1)
+				{<span id="9">
+					std::cout &lt;&lt; i;
+				</span>}
+			</span>}
+		<button onClick = "myFunction('10','button10')" id="button10">-</button>	if (i == 1) {<span id="10">
+				std::cout &lt;&lt; a;
+			</span>}
+		<button onClick = "myFunction('11','button11')" id="button11">-</button>	else
+			{<span id="11">
+			</span>}
+		</span>}
+		int method1();
+		int method3();
+	<button onClick = "myFunction('12','button12')" id="button12">-</button>	int method2()
+		{<span id="12">
+			std::cout &lt;&lt; "Hello OOD";
+			return 0;
+		</span>}
+		int method4();
+	</span>};
+	
+
+
+<button onClick = "myFunction('13','button13')" id="button13">-</button>	static void globalFunction() {<span id="13">
+	<button onClick = "myFunction('14','button14')" id="button14">-</button><button onClick = "myFunction('15','button15')" id="button15">-</button><button onClick = "myFunction('16','button16')" id="button16">-</button>	std::map&lt;int, int&gt; map = {<span id="14"> {<span id="15"> 1,1 </span>},{<span id="16"> 2,2 </span>} </span>};
+	<button onClick = "myFunction('17','button17')" id="button17">-</button><button onClick = "myFunction('18','button18')" id="button18">-</button>	while (true) {<span id="17">
+			{<span id="18">
+				std::cout &lt;&lt; "\n Global Function";
+			</span>}
+			break;
+		</span>}
+	</span>}
+</span>}
+
+<button onClick = "myFunction('19','button19')" id="button19">-</button>static void globalFunction1() {<span id="19">
+<button onClick = "myFunction('20','button20')" id="button20">-</button><button onClick = "myFunction('21','button21')" id="button21">-</button><button onClick = "myFunction('22','button22')" id="button22">-</button>	std::map&lt;int, int&gt; map = {<span id="20"> {<span id="21"> 1,1 </span>},{<span id="22"> 2,2 </span>} </span>};
+<button onClick = "myFunction('23','button23')" id="button23">-</button><button onClick = "myFunction('24','button24')" id="button24">-</button>	while (true) {<span id="23">
+		{<span id="24">
+			std::cout &lt;&lt; "\n Global Function";
+		</span>}
+		break;
+	</span>}
+</span>}
+#endif
+
+</pre>
+</body>
+</html>
